@@ -13,6 +13,14 @@ module Types
       existing_user&.update(user.to_h)
     end
 
+    field :delete_user, Boolean, null: false, description: "Delete a specific User" do
+      argument :user_id, ID, required: true
+    end
+
+    def delete_user(user_id:)
+      User.where(id: user_id).destroy
+    end
+
     field :create_post, Types::PostType, null: false, description: "Create a post for a specific User" do
       argument :user_id, ID, required: true
       argument :body, String, required: true
@@ -33,6 +41,15 @@ module Types
       existing_post&.update(body: body)
     end
 
+    field :delete_post, Boolean, null: false, description: "Delete a specific Post" do
+      argument :post_id, ID, required: true
+    end
+
+    def delete_post(post_id:)
+      # this way we specify exact record to be deleted
+      Post.destroy(post_id)
+    end
+
     field :create_comment, Types::CommentType, null: false, description: "Create a comment under a specific Post" do
       argument :post_id, ID, required: true
       argument :body, String, required: true
@@ -51,6 +68,14 @@ module Types
     def update_comment(comment_id:, body:)
       existing_comment = Comment.where(id: comment_id)
       existing_comment&.update(body: body)
+    end
+
+    field :delete_comment, Boolean, null: false, description: "Delete a specific Comment" do
+      argument :comment_id, ID, required: true
+    end
+
+    def delete_comment(comment_id:)
+      Comment.destroy(comment_id)
     end
   end
 end
