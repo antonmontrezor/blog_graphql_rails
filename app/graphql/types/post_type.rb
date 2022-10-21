@@ -13,4 +13,10 @@ class Types::PostType < Types::BaseObject
   def comments
     Comment.all.where(post_id: get_post_id)
   end
+
+  field :errors, [Types::ErrorType], null: true
+
+  def errors
+    object.errors.map { |e| { field_name: e.attribute, errors: object.errors[e.attribute]} }
+  end
 end

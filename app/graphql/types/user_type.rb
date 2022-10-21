@@ -26,6 +26,12 @@ class Types::UserType < Types::BaseObject
   def address
     "#{object.number} #{object.street}, #{object.city}, #{object.postcode}, #{object.country}"
   end
+
+  field :errors, [Types::ErrorType], null: true
+
+  def errors
+    object.errors.map { |e| { field_name: e.attribute, errors: object.errors[e.attribute]} }
+  end
 end
 
 class Types::UserInputType < GraphQL::Schema::InputObject
